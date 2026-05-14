@@ -15,21 +15,59 @@ The sections below help you pick the right approach for your setup. Configuratio
 ## Options
 
 ```mermaid
-%%{init: {'theme': 'dark', 'themeVariables': {'fontFamily': 'Oracle Sans, Helvetica Neue, Arial, sans-serif', 'fontSize': '14px', 'lineColor': '#64748B', 'edgeLabelBackground': '#1E293B', 'primaryColor': '#334155', 'primaryTextColor': '#E2E8F0', 'primaryBorderColor': '#4B5563'}}}%%
-flowchart TD
-    classDef decision fill:#334155,color:#E2E8F0,stroke:#64748B,stroke-width:2px
-    classDef native   fill:#0891B2,color:#ffffff,stroke:#0E7490,stroke-width:2px
-    classDef external fill:#059669,color:#ffffff,stroke:#047857,stroke-width:2px
-    classDef fallback fill:#DC2626,color:#ffffff,stroke:#B91C1C,stroke-width:2px
+%%{init: {
+  "theme": "dark",
+  "themeVariables": {
+    "fontSize": "14px",
+    "mainBkg": "#0d1117",
+    "nodeBorder": "#30363d",
+    "lineColor": "#8b949e",
+    "tertiaryColor": "#161b22",
+    "edgeLabelBackground": "#0d1117"
+  },
+  "flowchart": {
+    "curve": "linear",
+    "nodeSpacing": 85,
+    "rankSpacing": 100
+  }
+}}%%
 
-    A{Runner inside OCI?}:::decision
-    A -->|Yes| B{OCI resource type?}:::decision
-    A -->|No| E{Platform supports OIDC?}:::decision
-    B -->|Compute VM| C[Instance Principals]:::native
-    B -->|OCI DevOps Pipeline| D[Resource Principals]:::native
-    B -->|OKE Pod| F[OKE Workload Identity]:::native
-    E -->|Yes — GitHub Actions / GitLab CI| G[Workload Identity Federation]:::external
-    E -->|No — Legacy Jenkins / Scripts| H[API Signing Keys]:::fallback
+flowchart LR
+    Start(["OCI Authentication"])
+
+    A{"Runner<br/>in OCI?"}
+    B{"OCI<br/>resource<br/>type"}
+    E{"OIDC<br/>supported"}
+
+    C["Instance Principals<br/>OCI Compute VM"]
+    D["Resource Principals<br/>OCI DevOps Pipeline"]
+    F["OKE Workload Identity<br/>Kubernetes Pods"]
+    G["Workload Identity Federation<br/>GitHub/GitLab/Azure Devops"]
+    H["API Signing Keys<br/>Legacy / Local Development"]
+
+    Start --> A
+
+    A -->|Yes| B
+    A -->|No| E
+
+    B -->|Compute| C
+    B -->|DevOps| D
+    B -->|OKE| F
+
+    E -->|Yes| G
+    E -->|No| H
+
+    classDef start fill:#161b22,stroke:#30363d,color:#c9d1d9,stroke-width:1px;
+    classDef decision fill:#1e293b,stroke:#3b82f6,color:#eff6ff,stroke-width:2px;
+    classDef native fill:#064e3b,stroke:#10b981,color:#ecfdf5,stroke-width:1px;
+    classDef external fill:#312e81,stroke:#6366f1,color:#eef2ff,stroke-width:1px;
+    classDef fallback fill:#450a0a,stroke:#f43f5e,color:#fff1f2,stroke-width:1px;
+
+    class Start start;
+    class A,B,E decision;
+    class C,D,F native;
+    class G external;
+    class H fallback;
 ```
 
 | Method | Where the runner runs | Secrets to manage | Rotation |
