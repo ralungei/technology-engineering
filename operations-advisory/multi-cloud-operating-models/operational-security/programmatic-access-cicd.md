@@ -40,7 +40,7 @@ flowchart TD
 | **Workload Identity Federation** | Any external runner with OIDC | OAuth client only | Automatic |
 | **API Signing Keys** | Anywhere | Private key, rotated every 90 days | Manual |
 
-## What We Recommend
+## Best Practices
 
 ### Runner inside OCI
 
@@ -56,25 +56,23 @@ No keys. No rotation process. No secrets in your pipeline configuration.
 
 ### Runner outside OCI
 
-If your platform supports OIDC (GitHub Actions, GitLab CI, and most modern CI tools do), use **Workload Identity Federation**. The only thing stored in your CI/CD system is an OAuth `client_id` and `client_secret` that can only be used to exchange tokens — it gives no access to OCI resources on its own.
+If your platform supports OIDC (GitHub Actions, GitLab CI, and most modern CI tools do), use **Workload Identity Federation**. The only thing stored in your CI/CD system is an OAuth `client_id` and `client_secret` that can only be used to exchange tokens, it gives no access to OCI resources on its own.
 
 ### When nothing else works
 
-If your tooling does not support OIDC and does not run inside OCI, use **API Signing Keys**. Follow the hardening steps in the implementation guide — they are not optional.
-
-> Oracle's IAM security documentation lists API Signing Keys last in the preference order, after native principals and session-based methods.
+If your tooling does not support OIDC and does not run inside OCI, use **API Signing Keys**. Follow the hardening steps in the implementation guide, they are not optional.
 
 ## Security Basics
 
 These apply regardless of which method you use:
 
-- **Scope policies to a compartment.** Never use `manage all-resources in tenancy` for a CI/CD identity.
+- **Scope policies to a compartment.** Never use `manage all-resources in tenancy` for a CI/CD identity.  
 - **One identity per pipeline.** Do not share keys or dynamic group rules across unrelated teams or projects.
 - **Check the audit logs.** OCI logs every API call with the full principal identity. Filter by principal OCID to confirm only expected actions are happening.
-- **No credentials in code.** Keys must not appear in source files, Dockerfiles, or build specs — ever.
+- **No credentials in code.** Keys must not appear in source files, Dockerfiles, or build specs, ever.
 
 ## License
 
-Copyright (c) 2026 Oracle and/or its affiliates.
-Licensed under the Universal Permissive License (UPL), Version 1.0.
-See [LICENSE](LICENSE) for more details.
+Copyright (c) 2026 Oracle and/or its affiliates.  
+Licensed under the Universal Permissive License (UPL), Version 1.0.  
+See [LICENSE](LICENSE) for more details.  
