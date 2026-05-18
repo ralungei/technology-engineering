@@ -19,7 +19,6 @@ Last reviewed: 2026-05-14
   - [10. Tooling And Guardrails](#10-tooling-and-guardrails)
   - [11. OCI Terraform Exception Path](#11-oci-terraform-exception-path)
   - [12. Module Alignment](#12-module-alignment)
-  - [13. Official References](#13-official-references)
 - [License](#license)
 
 ## 1. Overview
@@ -242,28 +241,6 @@ Do not leave OCI Terraform and the Google Cloud-side Terraform stack as two acti
 |---|---|
 | OCI | Use `oci-landing-zones/terraform-oci-modules-exadata` for the database layer. It creates and owns DB Homes, CDBs, PDBs, and backups using the VM Cluster OCID exported by the Google Cloud stack. It should use narrow `ignore_changes` for supported Day 2 operations. Do not let it manage already Google-owned Infrastructure or VM Cluster resources unless ownership is explicitly transferred. |
 | Google Cloud | Use `oci-landing-zones/terraform-oci-multicloud-google` for GCP Day 1. It creates and owns ODB Networks, ODB Subnets, Cloud Exadata Infrastructures, and Cloud VM Clusters. It references an externally owned VPC, exports dependency JSON and VM Cluster OCID, and includes narrow drift handling for OCI-side operations. Do not use it for in-place ECPU/OCPU or Infrastructure capacity/maintenance/customer-contact updates. Those fields are replacement-only in the Google provider. |
-
-## 13. Official References
-
-- [Oracle Database@Google Cloud Terraform provisioning](https://cloud.google.com/oracle/database/docs/terraform)
-- [Oracle Database@Google Cloud VM Cluster management](https://cloud.google.com/oracle/database/docs/manage-clusters)
-- [HashiCorp Google provider](https://registry.terraform.io/providers/hashicorp/google/latest)
-- [Google provider Oracle Database source](https://github.com/hashicorp/terraform-provider-google/tree/v7.31.0/google/services/oracledatabase)
-- [Oracle OCI Terraform provider](https://registry.terraform.io/providers/oracle/oci/latest)
-- [OCI Terraform `oci_database_cloud_exadata_infrastructure`](https://docs.oracle.com/en-us/iaas/tools/terraform-provider-oci/latest/docs/r/database_cloud_exadata_infrastructure.html)
-- [OCI Terraform `oci_database_cloud_vm_cluster`](https://docs.oracle.com/en-us/iaas/tools/terraform-provider-oci/latest/docs/r/database_cloud_vm_cluster.html)
-- [OCI Terraform `oci_database_db_home`](https://docs.oracle.com/en-us/iaas/tools/terraform-provider-oci/latest/docs/r/database_db_home.html)
-- [OCI Terraform `oci_database_database`](https://docs.oracle.com/en-us/iaas/tools/terraform-provider-oci/latest/docs/r/database_database.html)
-- [OCI Terraform `oci_database_pluggable_database`](https://docs.oracle.com/en-us/iaas/tools/terraform-provider-oci/latest/docs/r/database_pluggable_database.html)
-- [OCI Landing Zones Exadata modules](https://github.com/oci-landing-zones/terraform-oci-modules-exadata)
-- [Exadata Fleet Update overview](https://docs.oracle.com/en-us/iaas/exadata-fleet-update/doc/exadata-fleet-update-overview.html)
-- [Using the `dbaascli` Utility](https://docs.oracle.com/en/engineered-systems/exadata-cloud-service/ecscm/ecs-using-dbaascli.html)
-- [OCI Ansible Collection](https://docs.oracle.com/iaas/Content/API/SDKDocs/ansible.htm)
-- [Terraform State](https://developer.hashicorp.com/terraform/language/state)
-- [Terraform Import](https://developer.hashicorp.com/terraform/cli/import)
-- [Terraform Resource Removal](https://developer.hashicorp.com/terraform/language/state/remove)
-- [Terraform Lifecycle Meta-Arguments](https://developer.hashicorp.com/terraform/language/meta-arguments/lifecycle)
-- [Terraform Backend Types](https://developer.hashicorp.com/terraform/language/backend)
 
 # License
 
